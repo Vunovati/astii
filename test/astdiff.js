@@ -13,7 +13,7 @@ describe('#diff', function() {
             jsFile2 = fs.readFileSync(path.join(exports.testDir, 'test_files/example2.js')),
             expectedDiff = fs.readFileSync(path.join(exports.testDir, 'test_files/expected1-2.diff')).toString();
 
-        var result = diff(jsFile1, jsFile2);
+        var result = diff(jsFile1, jsFile2, 'example1.js');
 
         result.should.equal(expectedDiff);
     });
