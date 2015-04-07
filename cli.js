@@ -4,54 +4,18 @@
 
 require('colors');
 var fs = require('fs'),
-    esprima = require('esprima'),
-    escodegen = require('escodegen'),
-    jsdiff = require('diff');
+    astdiff = require('./astdiff');
 
-var filename1 = process.argv[2];
-var filename2 = process.argv[3];
-var outputFormat = process.argv[4];
+var command = process.argv[2];
+var filename1 = process.argv[3];
+var filename2 = process.argv[4];
 
-var ast1 = esprima.parse(fs.readFileSync(filename1));
-var ast2 = esprima.parse(fs.readFileSync(filename2));
-
-var format1,
-    format2,
-    diff;
-
-var printColoredDiffs = function(diff) {
-    diff.forEach(function(part) {
-        var color = part.added ? 'green' :
-            part.removed ? 'red' : undefined;
-        if (color) {
-            console.log(part.value[color]);
-        } else {
-            console.log(part.value);
-        }
-    });
-};
-
-var printRegion = function(region, prefix) {
-    region.split("\n").forEach(function(line) {
-        console.log(prefix + line);
-    });
-};
-
-format1 = escodegen.generate(ast1);
-format2 = escodegen.generate(ast2);
-diff = jsdiff.diffLines(format2, format1);
-if (outputFormat === '--human') {
-    printColoredDiffs(diff);
-} else if (outputFormat === '--color') {
-    console.log('--- a/' + filename1);
-    console.log('+++ b/' + filename2);
-    diff.forEach(function(part) {
-        if (part.added) {
-            printRegion(part.value, '-');
-        } else if (part.removed) {
-            printRegion(part.value, '+');
-        }
-    });
-} else {
-    console.log(jsdiff.createPatch(filename1, format1, format2));
+if (command === 'patch') {
+    var source1 = fs.readFileSync(filename1);
+    var patch = fs.readFileSync(filename2).toString();
+    console.log(astdiff.patch(source1, patch));
+} else if (command === 'diff') {
+    var source1 = fs.readFileSync(filename1);
+    var source2 = fs.readFileSync(filename2);
+    console.log(astdiff.diff(source1, source2));
 }

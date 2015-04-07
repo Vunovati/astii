@@ -1,3 +1,5 @@
+'use strict';
+
 var esprima = require('esprima'),
     escodegen = require('escodegen'),
     jsdiff = require('diff');
@@ -20,9 +22,8 @@ var getDiff = function(file1, file2) {
 };
 
 var applyPatch = function(file1, diff) {
-    var ast1 = esprima.parse(file1);
-
     var format1;
+    var ast1 = esprima.parse(file1);
 
     format1 = escodegen.generate(ast1);
 
@@ -31,7 +32,7 @@ var applyPatch = function(file1, diff) {
     return patched + '\n';
 };
 
-module.exports =  {
-        diff: getDiff,
-        patch: applyPatch
+module.exports = {
+    diff: getDiff,
+    patch: applyPatch
 };

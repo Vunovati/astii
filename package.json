@@ -1,7 +1,7 @@
 {
   "name": "astdiff",
   "description": "AST aware diff",
-  "main": "astdiff.js",
+  "main": "cli.js",
   "version": "0.0.1",
   "engines": {
     "node": ">=0.4.0"
@@ -13,7 +13,7 @@
     }
   ],
   "bin": {
-    "astdiff": "astdiff.js"
+    "ast": "cli.js"
   },
   "repository": {
     "type": "git",
