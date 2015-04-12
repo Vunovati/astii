@@ -2,52 +2,64 @@
 
 'use strict';
 
-require('colors');
-require('shelljs/global');
 var fs = require('fs'),
-    astdiff = require('./astdiff');
+    astdiff = require('./astdiff'),
+    shell = require('shelljs'),
+    astii = require('commander');
 
-var command = process.argv[2];
-var arg2 = process.argv[3];
-var arg3 = process.argv[4];
-var arg4 = process.argv[5];
+astii
+    .version('0.0.1');
 
+astii
+    .command('patch <file1> <patchfile>')
+    .description('apply an astii-generated diff file to an original in an AST-aware way')
+    .action(function(file1, patchfile) {
+        console.log(file1 + ' ' + patchfile);
+        var source1 = fs.readFileSync(file1);
+        var patch = fs.readFileSync(patchfile).toString();
+        console.log(astdiff.patch(source1, patch));
+    });
 
-var checkGit = function() {
-    if (!which('git')) {
-        echo('Sorry, this script requires git');
-        exit(1);
-    }
-};
+astii
+    .command('diff <file1> <file2>')
+    .description('compare AST-neutral representations of two JavaScript files line by line')
+    .action(function(file1, file2) {
+        console.log(file1 + ' ' + file2);
+        var source1 = fs.readFileSync(file1);
+        var source2 = fs.readFileSync(file2);
+        console.log(astdiff.diff(source1, source2));
+    });
+
+astii
+    .command('git-diff <file1> <SHA>')
+    .description('compare AST-neutral representations of a JavaScript files against its specified git revision')
+    .action(function(file1, SHA) {
+        var source1 = fs.readFileSync(file1);
+        var source2 = getFileForSha(file1, SHA);
+        console.log(astdiff.diff(source1, source2, file1));
+    });
+
+astii
+    .command('git-diff-version <file1> <SHA1> <SHA2>')
+    .description('compare AST-neutral representations of a JavaScript file between two git revisions')
+    .action(function(file1, SHA1, SHA2) {
+        var source1 = getFileForSha(file1, SHA1);
+        var source2 = getFileForSha(file1, SHA2);
+        console.log(astdiff.diff(source1, source2, file1));
+    });
 
 var getFileForSha = function(filename, sha) {
-    return exec('git show  ' + sha + ':' + filename, {
+    checkGit();
+    return shell.exec('git show  ' + sha + ':' + filename, {
         silent: true
     }).output;
 };
 
-if (command === 'patch') {
-    var source1 = fs.readFileSync(arg2);
-    var patch = fs.readFileSync(arg3).toString();
-    console.log(astdiff.patch(source1, patch));
-} else if (command === 'diff') {
-    var source1 = fs.readFileSync(arg2);
-    var source2 = fs.readFileSync(arg3);
-    console.log(astdiff.diff(source1, source2));
-} else if (command === 'git-diff') {
-    checkGit();
+var checkGit = function() {
+    if (!shell.which('git')) {
+        shell.echo('Sorry, this command requires git');
+        shell.exit(1);
+    }
+};
 
-    var source1 = fs.readFileSync(arg2);
-    var sha = arg3;
-
-    var source2 = getFileForSha(arg2, sha);
-    console.log(astdiff.diff(source1, source2, arg2));
-} else if (command === 'git-diff-version') {
-    checkGit();
-
-    var sha1 = arg3;
-    var sha2 = arg4;
-    var source1 = getFileForSha(arg2, sha1);
-    var source2 = getFileForSha(arg2, sha2);
-    console.log(astdiff.diff(source1, source2, arg2));
-}
+astii.parse(process.argv);

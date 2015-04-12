@@ -1,6 +1,6 @@
 {
-  "name": "astdiff",
-  "description": "AST aware diff",
+  "name": "astii",
+  "description": "AST aware diff and patch",
   "main": "cli.js",
   "version": "0.0.1",
   "engines": {
@@ -13,26 +13,27 @@
     }
   ],
   "bin": {
-    "ast": "cli.js"
+    "astii": "cli.js"
   },
   "scripts": {
     "test": "make test"
   },
   "repository": {
     "type": "git",
-    "url": "http://github.com/Vunovati/astdiff.git"
+    "url": "http://github.com/Vunovati/astii.git"
   },
   "dependencies": {
     "colors": "^1.0.3",
+    "commander": "^2.7.1",
     "diff": "^1.3.1",
-    "shelljs": "^0.4.0",
     "escodegen": "^1.6.1",
-    "esprima": "^2.1.0"
+    "esprima": "^2.1.0",
+    "shelljs": "^0.4.0"
   },
   "licenses": [
     {
-      "type": "BSD",
-      "url": "http://github.com/estools/escope/raw/master/LICENSE.BSD"
+      "type": "MIT",
+      "url": "https://raw.githubusercontent.com/Vunovati/astii/master/LICENSE"
     }
   ],
   "devDependencies": {
