@@ -30,6 +30,9 @@ generated JS source file         generated JS source file2
 This enables you to have more meaningfull diffs between files which may be very simmilar but have different source code formatting.
 
 
+When patching, astii patch will regenerate (original --> AST --> generate) the source file and patch it with the provided diff.
+
+
 ## installation: 
 
 npm install . -g
