@@ -1,7 +1,9 @@
 'use strict';
 var esprima = require('esprima'),
     escodegen = require('escodegen'),
-    jsdiff = require('diff');
+    jsdiff = require('diff'),
+    scopeFinder = require('./scope_finder'),
+    astraverse = require('./astraverse');
 var getDiff = function(file1, file2, fileName) {
     var ast1 = esprima.parse(file1);
     var ast2 = esprima.parse(file2);
@@ -19,7 +21,25 @@ var applyPatch = function(file1, diff) {
     var patched = jsdiff.applyPatch(format1, diff);
     return patched + '\n';
 };
+var applyPatchPreserve = function(sourceCode, diff) {
+    var astOfOriginalFile = esprima.parse(sourceCode, {
+        loc: true,
+        source: sourceCode.toString()
+    });
+    var regeneratedOriginalFile = escodegen.generate(astOfOriginalFile, {
+        sourceMapWithCode: true, // Get both code and source map
+        sourceContent: sourceCode.toString()
+    });
+    var patched = jsdiff.applyPatch(regeneratedOriginalFile.code, diff);
+    var astOfPatchedFile = esprima.parse(patched, {
+        loc: true,
+        source: patched
+    });
+
+    return astraverse.equalizeTrees(astOfPatchedFile, astOfOriginalFile);
+};
 module.exports = {
     diff: getDiff,
-    patch: applyPatch
+    patch: applyPatch,
+    patchPreserve: applyPatchPreserve
 };

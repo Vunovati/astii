@@ -16,7 +16,8 @@
     "astii": "cli.js"
   },
   "scripts": {
-    "test": "make test"
+    "test": "make test",
+    "debug": "node-debug _mocha"
   },
   "repository": {
     "type": "git",
@@ -26,6 +27,7 @@
     "colors": "^1.0.3",
     "commander": "^2.7.1",
     "diff": "^1.3.1",
+    "diff-parse": "0.0.13",
     "escodegen": "^1.6.1",
     "esprima": "^2.1.0",
     "estraverse": "^3.1.0",

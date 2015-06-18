@@ -4,7 +4,7 @@ A JavaScript AST-aware diff and patch toolset
 
 When comparing two JavaScript files, standard diff tools compare the two files line-by-line
 and output the lines on which the files differ.
-This tool does not compare the two source files but their abstract representation - their [abstract syntax trees](http://en.wikipedia.org/wiki/Abstract_syntax_tree).
+This tool does not compare the characters of the source files directly but their abstract representation - their [abstract syntax trees](http://en.wikipedia.org/wiki/Abstract_syntax_tree).
 
 ```
 JavaScript source file1          JavaScript source file2  

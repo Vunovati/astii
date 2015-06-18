@@ -2,6 +2,7 @@ var should = require('chai').should(),
     astdiff = require('../astdiff'),
     diff = astdiff.diff,
     patch = astdiff.patch,
+    patchPreserve = astdiff.patchPreserve,
     fs = require('fs'),
     path = require('path');
 
@@ -28,5 +29,30 @@ describe('#patch', function() {
         var result = patch(jsFile1, diff);
 
         result.should.equal(generatedFile.toString());
+    });
+});
+
+describe('#patchPreserve', function() {
+    it('returns a very simple patched file, preserving the untouched scopes', function() {
+        var jsFile1 = fs.readFileSync(path.join(exports.testDir, 'test_files/astraverse/example1-comments.js')),
+            generatedFile = fs.readFileSync(path.join(exports.testDir, 'test_files/astraverse/example1-comments-patched-with2.js')),
+            diff = fs.readFileSync(path.join(exports.testDir, 'test_files/astraverse/expected1-2.diff')).toString();
+
+        var result = patchPreserve(jsFile1, diff);
+
+        result.should.equal(generatedFile.toString());
+    });
+
+    it('returns a patched file with multiple functions, preserving the untouched scopes', function() {
+        var jsFile1 = fs.readFileSync(path.join(exports.testDir, 'test_files/astraverse/functions1.js')),
+            generatedFile = fs.readFileSync(path.join(exports.testDir, 'test_files/astraverse/functions-target.js')),
+            diff = fs.readFileSync(path.join(exports.testDir, 'test_files/astraverse/functions.diff')).toString();
+
+        var result = patchPreserve(jsFile1, diff);
+
+        result.should.equal(generatedFile.toString());
+    });
+
+    xit('returns a patched file with multiple changes in multiple functions, preserving the untouched scopes', function() {
     });
 });

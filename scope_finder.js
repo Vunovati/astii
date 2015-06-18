@@ -31,7 +31,7 @@ function containsEntireChange(changeLoc) {
     };
 }
 
-var getChangedScopeNode = function(ast, changeLoc) {
+var getChangedLines = function(ast, changeLoc) {
     estraverse.traverse(ast, {
         enter: enterScope(changeLoc),
         leave: leaveScope(changeLoc)
@@ -41,5 +41,6 @@ var getChangedScopeNode = function(ast, changeLoc) {
 };
 
 module.exports = {
-    getChangedNode: getChangedScopeNode
+    //get the smallest node which contains all the lines
+    getChangedNode: getChangedLines
 };

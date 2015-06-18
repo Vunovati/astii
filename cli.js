@@ -13,11 +13,16 @@ astii
 astii
     .command('patch <file1> <patchfile>')
     .description('apply an astii-generated diff file to an original in an AST-aware way')
-    .action(function(file1, patchfile) {
+    .option('-P, --preserve', 'preserve code formatting (exprimental)', 'public')
+    .action(function(file1, patchfile, cmd) {
         console.log(file1 + ' ' + patchfile);
         var source1 = fs.readFileSync(file1);
         var patch = fs.readFileSync(patchfile).toString();
-        console.log(astdiff.patch(source1, patch));
+        if (cmd.preserve) {
+            console.log('preserve');
+        } else {
+            console.log(astdiff.patch(source1, patch));
+        }
     });
 
 astii
