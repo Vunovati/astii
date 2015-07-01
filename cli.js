@@ -12,24 +12,24 @@ astii
 
 astii
     .command('patch <file1> <patchfile>')
-    .description('apply an astii-generated diff file to an original in an AST-aware way')
-    .option('-P, --preserve', 'preserve code formatting (exprimental)', 'public')
+    .description('apply an astii-generated diff file to an original in an AST-aware way, losing original formatting')
     .action(function(file1, patchfile, cmd) {
-        console.log(file1 + ' ' + patchfile);
         var source1 = fs.readFileSync(file1);
         var patch = fs.readFileSync(patchfile).toString();
-        if (cmd.preserve) {
-            console.log('preserve');
-        } else {
-            console.log(astdiff.patch(source1, patch));
-        }
+        console.log(astdiff.patch(source1, patch));
     });
-
+astii
+    .command('patchPreserve <file1> <patchfile>')
+    .description('apply an astii-generated diff file to an original in an AST-aware way, preserving original formatting')
+    .action(function(file1, patchfile, cmd) {
+        var source1 = fs.readFileSync(file1);
+        var patch = fs.readFileSync(patchfile).toString();
+        console.log(astdiff.patchPreserve(source1, patch));
+    });
 astii
     .command('diff <file1> <file2>')
     .description('compare AST-neutral representations of two JavaScript files line by line')
     .action(function(file1, file2) {
-        console.log(file1 + ' ' + file2);
         var source1 = fs.readFileSync(file1);
         var source2 = fs.readFileSync(file2);
         console.log(astdiff.diff(source1, source2));
