@@ -53,6 +53,13 @@ describe('#patchPreserve', function() {
         result.should.equal(generatedFile.toString());
     });
 
-    xit('returns a patched file with multiple changes in multiple functions, preserving the untouched scopes', function() {
+    it('returns a patched file with multiple changes in multiple functions, preserving the untouched scopes', function() {
+        var jsFile1 = fs.readFileSync(path.join(exports.testDir, 'test_files/astraverse/functions1.js')),
+            generatedFile = fs.readFileSync(path.join(exports.testDir, 'test_files/astraverse/functions-target-multiple-changes.js')),
+            diff = fs.readFileSync(path.join(exports.testDir, 'test_files/astraverse/functions-multiple-changes.diff')).toString();
+
+        var result = patchPreserve(jsFile1, diff);
+
+        result.should.equal(generatedFile.toString());
     });
 });

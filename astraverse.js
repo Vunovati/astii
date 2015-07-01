@@ -7,7 +7,7 @@ var isLiteral = function(element) {
 };
 
 var performOnParallellTraverse = function(action) {
-    var parallellTraverse = function parallellTraverse(actual, expected, actualParent, expectedParent) {
+    var parallelTraverse = function parallellTraverse(actual, expected, actualParent, expectedParent) {
         var attr;
 
         // Literal values
@@ -41,14 +41,13 @@ var performOnParallellTraverse = function(action) {
         }
     };
 
-    return parallellTraverse;
+    return parallelTraverse;
 };
 
 var equalizeTrees = function(patchedTree, originalTree) {
     var sourceCode = originalTree.loc.source;
 
     var replaceOriginalSourceWithPatch = function(a, b) {
-        console.log('should replace content ' + JSON.stringify(b.loc) + ' from original file with ' + JSON.stringify(a.loc) + ' from changed file');
         sourceCode = patchSource(a.loc, b.loc, sourceCode);
     };
 
