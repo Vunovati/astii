@@ -44,6 +44,7 @@ When patching, astii patch will regenerate (original --> AST --> generate) the s
 ## Tests
 
   `npm install`
+  
   `npm test`
 
 ## usage
