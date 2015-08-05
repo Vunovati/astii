@@ -17,7 +17,8 @@
   },
   "scripts": {
     "test": "mocha --reporter spec",
-    "debug": "node-debug _mocha"
+    "debug": "node-debug _mocha",
+    "cover": "node_modules/istanbul/lib/cli.js cover node_modules/mocha/bin/_mocha -- -R spec test/*"
   },
   "repository": {
     "type": "git",
@@ -40,6 +41,8 @@
   ],
   "devDependencies": {
     "chai": "^2.2.0",
+    "coveralls": "^2.11.3",
+    "istanbul": "^0.3.17",
     "mocha": "^2.2.1"
   }
 }
