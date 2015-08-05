@@ -5,9 +5,20 @@ var esprima = require('esprima'),
     scopeFinder = require('./scope_finder'),
     astraverse = require('./astraverse');
 var getDiff = function(file1, file2, fileName) {
-    var ast1 = esprima.parse(file1);
-    var ast2 = esprima.parse(file2);
+    var ast1;
+    var ast2;
     var format1, format2, diff;
+
+    try {
+        ast1 = esprima.parse(file1);
+    } catch (e) {
+        throw 'unable to parse ' + file1;
+    }
+    try {
+        ast2 = esprima.parse(file2);
+    } catch (e) {
+        throw 'unable to parse ' + file2;
+    }
     format1 = escodegen.generate(ast1);
     format2 = escodegen.generate(ast2);
     diff = jsdiff.diffLines(format2, format1);
@@ -27,7 +38,7 @@ var applyPatchPreserve = function(sourceCode, diff) {
             loc: true,
             source: source.toString()
         });
-    }
+    };
     var astOfOriginalFile = createAst(sourceCode);
     var regeneratedOriginalFile = escodegen.generate(astOfOriginalFile, {
         sourceMapWithCode: true, // Get both code and source map

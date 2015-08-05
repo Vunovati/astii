@@ -32,7 +32,13 @@ astii
     .action(function(file1, file2) {
         var source1 = fs.readFileSync(file1);
         var source2 = fs.readFileSync(file2);
-        console.log(astdiff.diff(source1, source2));
+        try {
+            console.log(astdiff.diff(source1, source2));
+        } catch (e) {
+            shell.echo(e);
+            shell.exit(1);
+        }
+
     });
 
 astii
@@ -50,14 +56,27 @@ astii
     .action(function(file1, SHA1, SHA2) {
         var source1 = getFileForSha(file1, SHA1);
         var source2 = getFileForSha(file1, SHA2);
-        console.log(astdiff.diff(source1, source2, file1));
+        try {
+            console.log(astdiff.diff(source1, source2, file1));
+        } catch (e) {
+            shell.echo(e);
+            shell.exit(1);
+        }
     });
 
 var getFileForSha = function(filename, sha) {
     checkGit();
-    return shell.exec('git show  ' + sha + ':' + filename, {
+
+    var command = shell.exec('git show  ' + sha + ':' + filename, {
         silent: true
-    }).output;
+    });
+
+    if (command.code !== 0) {
+        shell.echo('Could not find file for this revision: ' + command.output);
+        shell.exit(1);
+    }
+
+    return command.output;
 };
 
 var checkGit = function() {
