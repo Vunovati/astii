@@ -22,10 +22,13 @@ var applyPatch = function(file1, diff) {
     return patched + '\n';
 };
 var applyPatchPreserve = function(sourceCode, diff) {
-    var astOfOriginalFile = esprima.parse(sourceCode, {
-        loc: true,
-        source: sourceCode.toString()
-    });
+    var createAst = function(source) {
+        return esprima.parse(source, {
+            loc: true,
+            source: source.toString()
+        });
+    }
+    var astOfOriginalFile = createAst(sourceCode);
     var regeneratedOriginalFile = escodegen.generate(astOfOriginalFile, {
         sourceMapWithCode: true, // Get both code and source map
         sourceContent: sourceCode.toString()
@@ -36,7 +39,7 @@ var applyPatchPreserve = function(sourceCode, diff) {
         source: patched
     });
 
-    return astraverse.equalizeTrees(astOfPatchedFile, astOfOriginalFile);
+    return astraverse.equalizeTrees(astOfPatchedFile, sourceCode, createAst);
 };
 module.exports = {
     diff: getDiff,

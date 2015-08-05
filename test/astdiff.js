@@ -62,4 +62,14 @@ describe('#patchPreserve', function() {
 
         result.should.equal(generatedFile.toString());
     });
+
+    it('changes the entire scope when multiple assignment is encountered', function() {
+        var jsFile1 = fs.readFileSync(path.join(exports.testDir, 'test_files/singleAssignment.js')),
+            generatedFile = fs.readFileSync(path.join(exports.testDir, 'test_files/multipleAssignment.js')),
+            diff = fs.readFileSync(path.join(exports.testDir, 'test_files/assignments.diff')).toString();
+
+        var result = patchPreserve(jsFile1, diff);
+
+        result.should.equal(generatedFile.toString());
+    });
 });

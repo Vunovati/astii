@@ -7,24 +7,27 @@ var isLiteral = function(element) {
 };
 
 var performOnParallellTraverse = function(action) {
-    var parallelTraverse = function parallellTraverse(actual, expected, actualParent, expectedParent) {
+    var parallelTraverse = function parallellTraverse(actual, expected, actualLastFunctionScope, expectedLastFunctionScope) {
         var attr;
 
-        // Literal values
         if (isLiteral(actual)) {
             if (actual !== expected) {
-                action(actualParent, expectedParent);
+                action(actualLastFunctionScope, expectedLastFunctionScope);
             }
             return;
         }
 
-        // Arrays
+        if (actual.type === "BlockStatement") {
+            actualLastFunctionScope = actual;
+            expectedLastFunctionScope = expected;
+        }
+
         if (Array.isArray(actual)) {
             if (actual.length !== expected.length) {
-                action(actualParent, expectedParent);
+                action(actualLastFunctionScope, expectedLastFunctionScope);
             } else {
                 actual.forEach(function(_, i) {
-                    parallellTraverse(actual[i], expected[i], actual, expected);
+                    parallellTraverse(actual[i], expected[i], actualLastFunctionScope, expectedLastFunctionScope);
                 });
                 return;
             }
@@ -33,9 +36,9 @@ var performOnParallellTraverse = function(action) {
         for (attr in actual) {
             if (attr !== 'type' && attr !== 'loc' && attr !== 'raw' && actual.hasOwnProperty(attr) && expected.hasOwnProperty(attr)) {
                 if (expected && attr in expected) {
-                    parallellTraverse(actual[attr], expected[attr], actual, expected);
+                    parallellTraverse(actual[attr], expected[attr], actualLastFunctionScope, expectedLastFunctionScope);
                 } else {
-                    action(actual, expected);
+                    action(actualLastFunctionScope, expectedLastFunctionScope);
                 }
             }
         }
@@ -44,16 +47,28 @@ var performOnParallellTraverse = function(action) {
     return parallelTraverse;
 };
 
-var equalizeTrees = function(patchedTree, originalTree) {
-    var sourceCode = originalTree.loc.source;
+var equalizeTrees = function(patchedTree, sourceCode, createAst) {
+    var treesAreDifferent = true;
+    var originalTree = createAst(sourceCode);
 
     var replaceOriginalSourceWithPatch = function(a, b) {
-        sourceCode = patchSource(a.loc, b.loc, sourceCode);
+        var sourceToBePatched = b.loc.source;
+        var sourceCode = patchSource(a.loc, b.loc, sourceToBePatched);
+        var patchedAST = createAst(sourceCode);
+
+        throw patchedAST;
     };
 
-    performOnParallellTraverse(replaceOriginalSourceWithPatch)(patchedTree, originalTree);
+    while (treesAreDifferent) {
+        try {
+            performOnParallellTraverse(replaceOriginalSourceWithPatch)(patchedTree, originalTree, patchedTree, originalTree);
+            treesAreDifferent = false;
+        } catch (replacedTree) {
+            originalTree = replacedTree;
+        }
+    }
 
-    return sourceCode;
+    return originalTree.loc.source;
 };
 
 module.exports = {
