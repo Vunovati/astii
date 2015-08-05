@@ -47,7 +47,12 @@ astii
     .action(function(file1, SHA) {
         var source1 = fs.readFileSync(file1);
         var source2 = getFileForSha(file1, SHA);
-        console.log(astdiff.diff(source1, source2, file1));
+        try {
+            console.log(astdiff.diff(source1, source2, file1));
+        } catch (e) {
+            shell.echo(e);
+            shell.exit(1);
+        }
     });
 
 astii

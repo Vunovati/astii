@@ -2,7 +2,6 @@
 var esprima = require('esprima'),
     escodegen = require('escodegen'),
     jsdiff = require('diff'),
-    scopeFinder = require('./scope_finder'),
     astraverse = require('./astraverse');
 var getDiff = function(file1, file2, fileName) {
     var ast1;
