@@ -2,11 +2,11 @@
 
 var patchSource = require('./source_replacer').patchSource;
 
-var isLiteral = function(element) {
+function isLiteral(element) {
     return Object(element) !== element;
-};
+}
 
-var performOnParallellTraverse = function(action) {
+function performOnParallellTraverse(action) {
     var parallelTraverse = function parallellTraverse(actual, expected, actualLastFunctionScope, expectedLastFunctionScope) {
         var attr;
 
@@ -26,7 +26,7 @@ var performOnParallellTraverse = function(action) {
             if (actual.length !== expected.length) {
                 action(actualLastFunctionScope, expectedLastFunctionScope);
             } else {
-                actual.forEach(function(_, i) {
+                actual.forEach(function (_, i) {
                     parallellTraverse(actual[i], expected[i], actualLastFunctionScope, expectedLastFunctionScope);
                 });
                 return;
@@ -45,19 +45,19 @@ var performOnParallellTraverse = function(action) {
     };
 
     return parallelTraverse;
-};
+}
 
-var equalizeTrees = function(patchedTree, sourceCode, createAst) {
-    var treesAreDifferent = true;
-    var originalTree = createAst(sourceCode);
+function equalizeTrees(patchedTree, sourceCode, createAst) {
+    var treesAreDifferent = true,
+        originalTree = createAst(sourceCode);
 
-    var replaceOriginalSourceWithPatch = function(a, b) {
-        var sourceToBePatched = b.loc.source;
-        var sourceCode = patchSource(a.loc, b.loc, sourceToBePatched);
-        var patchedAST = createAst(sourceCode);
+    function replaceOriginalSourceWithPatch(a, b) {
+        var sourceToBePatched = b.loc.source,
+            sourceCode = patchSource(a.loc, b.loc, sourceToBePatched),
+            patchedAST = createAst(sourceCode);
 
         throw patchedAST;
-    };
+    }
 
     while (treesAreDifferent) {
         try {
@@ -69,7 +69,7 @@ var equalizeTrees = function(patchedTree, sourceCode, createAst) {
     }
 
     return originalTree.loc.source;
-};
+}
 
 module.exports = {
     equalizeTrees: equalizeTrees
