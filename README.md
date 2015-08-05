@@ -1,5 +1,9 @@
 # astii
 
+[![Build Status](https://travis-ci.org/Vunovati/astii.svg)](https://travis-ci.org/Vunovati/astii)
+[![Coverage Status](https://coveralls.io/repos/Vunovati/astii/badge.svg?branch=master&service=github)](https://coveralls.io/github/Vunovati/astii?branch=master)
+
+
 A JavaScript AST-aware diff and patch toolset
 
 When comparing two JavaScript files, standard diff tools compare the two files line-by-line
