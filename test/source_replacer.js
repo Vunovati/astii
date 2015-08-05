@@ -1,4 +1,5 @@
-var sourceReplacer = require('../source_replacer'),
+var should = require('chai').should(),
+    sourceReplacer = require('../source_replacer'),
     path = require('path');
 
 exports.testDir = path.dirname(__filename);

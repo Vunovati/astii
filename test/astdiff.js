@@ -1,4 +1,5 @@
-var astdiff = require('../astdiff'),
+var should = require('chai').should(),
+    astdiff = require('../astdiff'),
     diff = astdiff.diff,
     patch = astdiff.patch,
     patchPreserve = astdiff.patchPreserve,
