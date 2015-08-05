@@ -1,1 +1,10 @@
 node_modules
+coverage
+
+# Vim
+tags
+.netrwhist
+view
+*.swp
+*.swo
+.vim
