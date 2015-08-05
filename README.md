@@ -4,7 +4,7 @@ A JavaScript AST-aware diff and patch toolset
 
 When comparing two JavaScript files, standard diff tools compare the two files line-by-line
 and output the lines on which the files differ.
-This tool does not compare the two source files but their abstract representation - their [abstract syntax trees](http://en.wikipedia.org/wiki/Abstract_syntax_tree).
+This tool does not compare the characters of the source files directly but their abstract representation - their [abstract syntax trees](http://en.wikipedia.org/wiki/Abstract_syntax_tree).
 
 ```
 JavaScript source file1          JavaScript source file2  
@@ -35,8 +35,12 @@ When patching, astii patch will regenerate (original --> AST --> generate) the s
 
 ## installation: 
 
-npm install . -g
+  `npm install . -g`
 
+## Tests
+
+  `npm install`
+  `npm test`
 
 ## usage
   Usage: astii [options] [command]
@@ -44,7 +48,8 @@ npm install . -g
 
   Commands:
 
-    patch <file1> <patchfile>               apply an astii-generated diff file to an original in an AST-aware way
+    patch <file1> <patchfile>               apply an astii-generated diff file to an original in an AST-aware way, losing original formatting
+    patchPreserve <file1> <patchfile>       apply an astii-generated diff file to an original in an AST-aware way, preserving original formatting
     diff <file1> <file2>                    compare AST-neutral representations of two JavaScript files line by line
     git-diff <file1> <SHA>                  compare AST-neutral representations of a JavaScript files against its specified git revision
     git-diff-version <file1> <SHA1> <SHA2>  compare AST-neutral representations of a JavaScript file between two git revisions

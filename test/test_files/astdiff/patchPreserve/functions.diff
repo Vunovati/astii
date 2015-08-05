@@ -1,0 +1,15 @@
+Index: undefined
+===================================================================
+--- undefined
++++ undefined
+@@ -1,7 +1,7 @@
+ var a = 1, b = 5;
+ function f() {
+     var c;
+     (function g() {
++        var d = 'yo yo man';
+-        var d = 'yo';
+     }());
+ }
+\ No newline at end of file
+

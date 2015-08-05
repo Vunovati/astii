@@ -16,7 +16,8 @@
     "astii": "cli.js"
   },
   "scripts": {
-    "test": "make test"
+    "test": "mocha --reporter spec",
+    "debug": "node-debug _mocha"
   },
   "repository": {
     "type": "git",
@@ -28,6 +29,7 @@
     "diff": "^1.3.1",
     "escodegen": "^1.6.1",
     "esprima": "^2.1.0",
+    "estraverse": "^3.1.0",
     "shelljs": "^0.4.0"
   },
   "licenses": [
