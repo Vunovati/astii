@@ -11,15 +11,15 @@ astii
     .version('0.0.1');
 
 astii
-    .command('patch <file1> <patchfile>')
-    .description('apply an astii-generated diff file to an original in an AST-aware way, losing original formatting')
+    .command('patchSafe <file1> <patchfile>')
+    .description('apply an astii-generated diff file to an original in an AST-aware way, losing original formatting, safer')
     .action(function (file1, patchfile) {
         var source1 = fs.readFileSync(file1),
             patch = fs.readFileSync(patchfile).toString();
         console.log(astdiff.patch(source1, patch));
     });
 astii
-    .command('patchPreserve <file1> <patchfile>')
+    .command('patch <file1> <patchfile>')
     .description('apply an astii-generated diff file to an original in an AST-aware way, preserving original formatting')
     .action(function (file1, patchfile) {
         var source1 = fs.readFileSync(file1),
