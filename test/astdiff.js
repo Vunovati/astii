@@ -1,6 +1,5 @@
 var chai = require('chai'),
     should = chai.should(),
-    expect = chai.expect(),
     astdiff = require('../astdiff'),
     diff = astdiff.diff,
     patch = astdiff.patch,
