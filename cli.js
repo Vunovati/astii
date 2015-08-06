@@ -8,7 +8,7 @@ var fs = require('fs'),
     astii = require('commander');
 
 astii
-    .version('0.0.1');
+    .version('0.1.0');
 
 astii
     .command('patchSafe <file1> <patchfile>')
