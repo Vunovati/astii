@@ -4,7 +4,7 @@ var esprima = require('esprima'),
     jsdiff = require('diff'),
     astraverse = require('./astraverse');
 
-function getDiff(file1, file2, fileName) {
+function getDiff(file1, file2) {
     var ast1,
         ast2,
         format1,
@@ -25,7 +25,7 @@ function getDiff(file1, file2, fileName) {
     format1 = escodegen.generate(ast1);
     format2 = escodegen.generate(ast2);
     diff = jsdiff.diffLines(format2, format1);
-    patch = jsdiff.createPatch(fileName, format1, format2);
+    patch = jsdiff.createPatch(undefined, format1, format2);
     return patch;
 }
 
