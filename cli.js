@@ -93,3 +93,7 @@ function checkGit() {
 }
 
 astii.parse(process.argv);
+
+if (!process.argv.slice(2).length) {
+    astii.outputHelp();
+}
