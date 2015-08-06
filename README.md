@@ -56,8 +56,8 @@ When patching, astii patch will regenerate (original --> AST --> generate) the s
 
   Commands:
 
-    patch <file1> <patchfile>               apply an astii-generated diff file to an original in an AST-aware way, losing original formatting
-    patchPreserve <file1> <patchfile>       apply an astii-generated diff file to an original in an AST-aware way, preserving original formatting
+    patchSafe <file1> <patchfile>           apply an astii-generated diff file to an original in an AST-aware way, losing original formatting, safer
+    patch <file1> <patchfile>               apply an astii-generated diff file to an original in an AST-aware way, preserving original formatting
     diff <file1> <file2>                    compare AST-neutral representations of two JavaScript files line by line
     git-diff <file1> <SHA>                  compare AST-neutral representations of a JavaScript files against its specified git revision
     git-diff-version <file1> <SHA1> <SHA2>  compare AST-neutral representations of a JavaScript file between two git revisions
