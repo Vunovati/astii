@@ -2,7 +2,7 @@
 
 [![Build Status](https://travis-ci.org/Vunovati/astii.svg)](https://travis-ci.org/Vunovati/astii)
 [![Coverage Status](https://coveralls.io/repos/Vunovati/astii/badge.svg?branch=master&service=github)](https://coveralls.io/github/Vunovati/astii?branch=master)
-
+[![Dependency Status](https://david-dm.org/vunovati/astii.svg)](https://david-dm.org/vunovati/astii)
 
 A JavaScript AST-aware diff and patch toolset
 
