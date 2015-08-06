@@ -1,4 +1,6 @@
-var should = require('chai').should(),
+var chai = require('chai'),
+    should = chai.should(),
+    expect = chai.expect(),
     astdiff = require('../astdiff'),
     diff = astdiff.diff,
     patch = astdiff.patch,
@@ -16,6 +18,15 @@ describe('#diff', function () {
             result = diff(jsFile1, jsFile2, 'example1.js');
 
         result.should.equal(expectedDiff);
+    });
+
+    it('throws an exception if the file is not parsable', function () {
+        var jsFile1 = 'something that is not a javascript source',
+            jsFile2 = fs.readFileSync(path.join(exports.testDir, 'test_files/astdiff/diff/example2.js'));
+
+        (function () {
+            diff(jsFile1, jsFile2);
+        }).should.throw('unable to parse something that is not a javascript source');
     });
 });
 

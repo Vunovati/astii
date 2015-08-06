@@ -4,6 +4,18 @@ var esprima = require('esprima'),
     jsdiff = require('diff'),
     astraverse = require('./astraverse');
 
+function getTree(sourceCode) {
+    var tree;
+
+    try {
+        tree = esprima.parse(sourceCode);
+    } catch (e) {
+        throw 'unable to parse ' + sourceCode;
+    }
+
+    return tree;
+}
+
 function getDiff(file1, file2) {
     var ast1,
         ast2,
@@ -12,16 +24,8 @@ function getDiff(file1, file2) {
         diff,
         patch;
 
-    try {
-        ast1 = esprima.parse(file1);
-    } catch (e) {
-        throw 'unable to parse ' + file1;
-    }
-    try {
-        ast2 = esprima.parse(file2);
-    } catch (e) {
-        throw 'unable to parse ' + file2;
-    }
+    ast1 = getTree(file1);
+    ast2 = getTree(file2);
     format1 = escodegen.generate(ast1);
     format2 = escodegen.generate(ast2);
     diff = jsdiff.diffLines(format2, format1);
@@ -34,7 +38,7 @@ function applyPatch(file1, diff) {
         ast1,
         patched;
 
-    ast1 = esprima.parse(file1);
+    ast1 = getTree(file1);
     format1 = escodegen.generate(ast1);
     patched = jsdiff.applyPatch(format1, diff);
     return patched + '\n';
@@ -46,14 +50,14 @@ function applyPatchPreserve(sourceCode, diff) {
         patched,
         astOfPatchedFile;
 
-    function createAst(source) {
+    function createAstWithSourceMap(source) {
         return esprima.parse(source, {
             loc: true,
             source: source.toString()
         });
     }
 
-    astOfOriginalFile = createAst(sourceCode);
+    astOfOriginalFile = createAstWithSourceMap(sourceCode);
     regeneratedOriginalFile = escodegen.generate(astOfOriginalFile, {
         sourceMapWithCode: true,
         sourceContent: sourceCode.toString()
@@ -64,7 +68,7 @@ function applyPatchPreserve(sourceCode, diff) {
         source: patched
     });
 
-    return astraverse.equalizeTrees(astOfPatchedFile, sourceCode, createAst);
+    return astraverse.equalizeTrees(astOfPatchedFile, sourceCode, createAstWithSourceMap);
 }
 
 module.exports = {
