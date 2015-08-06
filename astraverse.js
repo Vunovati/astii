@@ -10,6 +10,10 @@ function performOnParallellTraverse(action) {
     var parallelTraverse = function parallellTraverse(actual, expected, actualLastFunctionScope, expectedLastFunctionScope) {
         var attr;
 
+        function shouldBeChecked(attr) {
+            return attr !== 'type' && attr !== 'loc' && attr !== 'raw' && actual.hasOwnProperty(attr) && expected.hasOwnProperty(attr);
+        }
+
         if (isLiteral(actual)) {
             if (actual !== expected) {
                 action(actualLastFunctionScope, expectedLastFunctionScope);
@@ -34,11 +38,9 @@ function performOnParallellTraverse(action) {
         }
 
         for (attr in actual) {
-            if (attr !== 'type' && attr !== 'loc' && attr !== 'raw' && actual.hasOwnProperty(attr) && expected.hasOwnProperty(attr)) {
+            if (shouldBeChecked(attr)) {
                 if (expected && attr in expected) {
                     parallellTraverse(actual[attr], expected[attr], actualLastFunctionScope, expectedLastFunctionScope);
-                } else {
-                    action(actualLastFunctionScope, expectedLastFunctionScope);
                 }
             }
         }
